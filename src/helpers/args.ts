@@ -1,4 +1,4 @@
-import { Flag } from '../enums/flag.js';
+import { Arg } from '../enums/arg.js';
 import ArgsData from '../interfaces/args-data.js';
 
 export default class Args {
@@ -8,12 +8,12 @@ export default class Args {
     rest.forEach((value, index, arr) => {
       if (value.charAt(0) === '-') {
         switch (value.charAt(1)) {
-          case Flag.s:
+          case Arg.s:
             const next = arr.at(index + 1);
-            result[Flag.s] = next && next.charAt(0) !== '-' ? next : '';
+            result[Arg.s] = next && next.charAt(0) !== '-' ? next : '';
             break;
-          case Flag.h:
-            result[Flag.h] = true;
+          case Arg.h:
+            result[Arg.h] = true;
         }
       }
     });

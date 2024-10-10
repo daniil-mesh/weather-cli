@@ -1,4 +1,7 @@
+import { Arg } from '../enums/arg.js';
+
 export default interface ArgsData {
-  s?: string;
-  h?: boolean;
+  [Arg.h]?: boolean;
+  [Arg.s]?: string;
+  [Arg.t]?: string;
 }
