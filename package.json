@@ -5,7 +5,9 @@
   "type": "module",
   "main": "dist/weather.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "run": "node dist/weather.js",
+    "debug": "tsc && node dist/weather.js"
   },
   "repository": {
     "type": "git",

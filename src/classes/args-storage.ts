@@ -2,9 +2,10 @@ import { Arg } from '../enums/arg.js';
 import { homedir } from 'os';
 import { join } from 'path';
 import { promises } from 'fs';
-import ArgsData from '../interfaces/args-data.js';
+import IArgsData from '../interfaces/args-data.js';
+import IArgsStorage from '../interfaces/args-storage.js';
 
-export default class DataStorage {
+export default class ArgsStorage implements IArgsStorage {
   private fileExt = '.json';
 
   constructor(private fileName = 'weather-data') {}
@@ -13,14 +14,24 @@ export default class DataStorage {
     return join(homedir(), `${this.fileName}${this.fileExt}`);
   }
 
-  public async get(key: Arg) {
+  public async getData() {
+    let data: IArgsData = {};
+    if (await this.isDataExist()) {
+      const file = await promises.readFile(this.filePath);
+      data = JSON.parse(file.toString());
+    }
+    return data;
+  }
+
+  public async getArg(key: Arg) {
     const data = await this.getData();
     return data[key];
   }
 
-  public async set(key: typeof Arg.h, value: boolean): Promise<void>;
-  public async set(key: typeof Arg.s, value: string): Promise<void>;
-  public async set(key: Arg, value: boolean | string): Promise<void> {
+  public async setArg(key: typeof Arg.h, value: boolean): Promise<void>;
+  public async setArg(key: typeof Arg.s, value: string): Promise<void>;
+  public async setArg(key: typeof Arg.t, value: string): Promise<void>;
+  public async setArg(key: Arg, value: boolean | string): Promise<void> {
     const data = await this.getData();
 
     switch (key) {
@@ -43,21 +54,12 @@ export default class DataStorage {
     await promises.writeFile(this.filePath, JSON.stringify(data));
   }
 
-  public async isFileExist() {
+  private async isDataExist() {
     try {
       await promises.stat(this.filePath);
       return true;
     } catch (e) {
       return false;
     }
-  }
-
-  private async getData() {
-    let data: ArgsData = {};
-    if (await this.isFileExist()) {
-      const file = await promises.readFile(this.filePath);
-      data = JSON.parse(file.toString());
-    }
-    return data;
   }
 }
