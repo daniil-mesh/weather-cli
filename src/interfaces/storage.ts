@@ -4,7 +4,7 @@ import { IStorageData } from './data.js';
 export default interface IStorage {
   readonly filePath: string;
 
-  getAll(): Promise<IStorageData>;
+  getData(): Promise<IStorageData>;
 
   get(key: StorageKey): Promise<string | undefined>;
 

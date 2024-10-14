@@ -45,7 +45,7 @@ class Weather {
   }
 
   private async getDataFromStorage() {
-    return this.fileStorage.getAll();
+    return this.fileStorage.getData();
   }
 
   private async getWeatherData(storageData: IStorageData) {

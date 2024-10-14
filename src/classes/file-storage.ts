@@ -14,7 +14,7 @@ export default class FileStorage implements IStorage {
     return join(homedir(), `${this.fileName}${this.fileExt}`);
   }
 
-  public async getAll() {
+  public async getData() {
     let data: IStorageData = {};
     if (await this.isDataExist()) {
       const file = await promises.readFile(this.filePath);
@@ -24,12 +24,12 @@ export default class FileStorage implements IStorage {
   }
 
   public async get(key: StorageKey) {
-    const data = await this.getAll();
+    const data = await this.getData();
     return data[key];
   }
 
   public async set(key: StorageKey, value: string): Promise<void> {
-    const data = await this.getAll();
+    const data = await this.getData();
     data[key] = value;
     await promises.writeFile(this.filePath, JSON.stringify(data));
   }
