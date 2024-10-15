@@ -1,5 +1,5 @@
-import { Key } from '../enums/key.js';
 import { IConsoleData } from '../interfaces/data.js';
+import { Key } from '../enums/key.js';
 
 export default class DataHelper {
   public static getConsoleData(args: string[]): IConsoleData {

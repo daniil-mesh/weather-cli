@@ -1,6 +1,6 @@
 export const Key = {
-  s: 's',
   h: 'h',
+  s: 's',
   t: 't',
 } as const;
 

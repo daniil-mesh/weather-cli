@@ -1,5 +1,5 @@
-import { StorageKey } from '../enums/key.js';
 import { IStorageData } from './data.js';
+import { StorageKey } from '../enums/key.js';
 
 export default interface IStorage {
   readonly filePath: string;
