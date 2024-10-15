@@ -12,6 +12,9 @@ export default interface WeatherData {
   id: number;
   name: string;
   cod: number;
+  rain?: Rain;
+  snow?: Snow;
+  message?: string;
 }
 
 export interface Coord {
@@ -53,4 +56,12 @@ export interface Sys {
   country: string;
   sunrise: number;
   sunset: number;
+}
+
+export interface Rain {
+  '1h': number;
+}
+
+export interface Snow {
+  '1h': number;
 }

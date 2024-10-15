@@ -5,6 +5,9 @@ import DataHelper from './helpers/data-helper.js';
 import FileStorage from './classes/file-storage.js';
 import IStorage from './interfaces/storage.js';
 import WeatherData from './interfaces/weather.js';
+import { Output } from './classes/output.js';
+import Modifies from './helpers/modifies.js';
+import { Color } from './enums/color.js';
 
 class Weather {
   private fileStorage: IStorage;
@@ -32,13 +35,13 @@ class Weather {
     return DataHelper.getConsoleData(process.argv);
   }
 
-  private async saveDataToStorage(consoleData: IConsoleData) {
-    const s = consoleData[Key.s];
+  private async saveDataToStorage(data: IConsoleData) {
+    const s = data[Key.s];
     if (s) {
       await this.fileStorage.set(Key.s, s);
     }
 
-    const t = consoleData[Key.t];
+    const t = data[Key.t];
     if (t) {
       await this.fileStorage.set(Key.t, t);
     }
@@ -48,20 +51,53 @@ class Weather {
     return this.fileStorage.getData();
   }
 
-  private async getWeatherData(storageData: IStorageData) {
-    if (!storageData.s) {
+  private async getWeatherData(data: IStorageData) {
+    if (!data.s) {
       throw new Error('Enter city!');
     }
 
-    if (!storageData.t) {
+    if (!data.t) {
       throw new Error('Enter token!');
     }
 
-    return new ApiWeather(storageData.s, storageData.t).get();
+    return new ApiWeather(data.s, data.t).get();
   }
 
-  private renderWeatherData(weatherData: WeatherData) {
-    console.log(weatherData);
+  private renderWeatherData(data: WeatherData) {
+    const modifies = [Modifies.colorize(Color.Cyan), Modifies.br()];
+    const pad: [number, string] = [15, ' '];
+
+    const city = new Output('City:'.padStart(...pad) + ' ' + data.name);
+    const weather = new Output(
+      'Weather:'.padStart(...pad) +
+        ' ' +
+        data.weather[0].main +
+        ' - ' +
+        data.weather[0].description
+    );
+    const temperature = new Output(
+      'Temperature:'.padStart(...pad) +
+        ' ' +
+        data.main.temp +
+        '° feels like ' +
+        data.main.feels_like +
+        '°'
+    );
+    const wind = new Output(
+      'Wind:'.padStart(...pad) +
+        ' ' +
+        data.wind.speed +
+        ' m/s gusts up ' +
+        data.wind.gust +
+        ' m/s'
+    );
+
+    console.log(
+      city.get(...modifies) +
+        weather.get(...modifies) +
+        temperature.get(...modifies) +
+        wind.get(...modifies)
+    );
   }
 }
 

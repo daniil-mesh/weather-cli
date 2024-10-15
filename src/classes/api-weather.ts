@@ -18,7 +18,10 @@ export default class ApiWeather {
       method: 'GET',
     });
 
-    const json = await data.body.json();
-    return json as WeatherData;
+    const json = (await data.body.json()) as WeatherData;
+    if (json.cod !== 200) {
+      throw new Error(json.message ?? 'API unknown error');
+    }
+    return json;
   }
 }
